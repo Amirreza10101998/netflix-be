@@ -35,7 +35,7 @@ mediasRouter.get("/:mediaId",
         try {
             const media = await findMediaById(req.params.mediaId)
             if (media) {
-                req.send(media)
+                res.send(media)
             } else {
                 next(createHttpError(`Media with id: ${req.params.mediaId} not found!`))
             }
