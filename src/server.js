@@ -5,10 +5,21 @@ import { badRequestHandler, genericErrorHandler, notFoundHandler } from "../erro
 import mediasRouter from "./api/medias/index.js";
 
 const server = Express()
-const port = 3001;
+const Port = process.env.PORT;
 
 /*----------Middlewares----------*/
-server.use(cors());
+const whitelist = [process.env.FE_DEV_URL, process.env.FE_PROD_URL]
+
+server.use(cors({
+    origin: (currentOrigin, corsNext) => {
+        if (!currentOrigin || whitelist.indexOf(currentOrigin) !== -1) {
+            corsNext(null, true)
+        } else {
+            corsNext(createHttpError(400, `Origin ${currentOrigin} is not in the whitelist!`))
+        }
+    }
+}));
+
 server.use(Express.json());
 
 /*----------Endpoints----------*/
@@ -20,9 +31,9 @@ server.use(notFoundHandler);
 server.use(genericErrorHandler);
 
 
-server.listen(port, () => {
+server.listen(Port, () => {
     console.table(listEndpoints(server));
-    console.log(`Server is running on post: ${port}`);
+    console.log(`Server is running on post: ${Port}`);
 })
 
 
