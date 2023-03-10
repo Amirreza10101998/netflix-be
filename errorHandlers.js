@@ -5,7 +5,7 @@ export const badRequestHandler = (err, req, res, next) => {
     } else {
         next(err)
     }
-};
+}
 
 //404
 export const notFoundHandler = (err, req, res, next) => {
