@@ -4,24 +4,22 @@ import cors from "cors"
 import { badRequestHandler, genericErrorHandler, notFoundHandler } from "../errorHandlers.js";
 import mediasRouter from "./api/medias/index.js";
 
-const server = Express()
+const server = Express();
 const Port = process.env.PORT;
 
 /*----------Middlewares----------*/
-const whitelist = [process.env.FE_DEV_URL, process.env.FE_PROD_URL]
+const whitelist = [process.env.FE_DEV_URL, process.env.FE_PROD_URL];
 
 server.use(cors({
     origin: (currentOrigin, corsNext) => {
         if (!currentOrigin || whitelist.indexOf(currentOrigin) !== -1) {
-            corsNext(null, true)
+            corsNext(null, true);
         } else {
-            corsNext(createHttpError(400, `Origin ${currentOrigin} is not in the whitelist!`))
+            corsNext(createHttpError(400, `Origin ${currentOrigin} is not in the whitelist!`));
         }
     },
-    // add the following line to add the Access-Control-Allow-Origin header
-    exposedHeaders: ['Access-Control-Allow-Origin']
+    exposedHeaders: ['Access-Control-Allow-Origin'] // add this line to add the Access-Control-Allow-Origin header
 }));
-
 
 server.use(Express.json());
 
@@ -33,12 +31,7 @@ server.use(badRequestHandler);
 server.use(notFoundHandler);
 server.use(genericErrorHandler);
 
-
 server.listen(Port, () => {
     console.table(listEndpoints(server));
     console.log(`Server is running on post: ${Port}`);
-})
-
-
-
-
+});
