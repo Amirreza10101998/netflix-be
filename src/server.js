@@ -17,8 +17,11 @@ server.use(cors({
         } else {
             corsNext(createHttpError(400, `Origin ${currentOrigin} is not in the whitelist!`))
         }
-    }
+    },
+    // add the following line to add the Access-Control-Allow-Origin header
+    exposedHeaders: ['Access-Control-Allow-Origin']
 }));
+
 
 server.use(Express.json());
 
